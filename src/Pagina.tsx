@@ -1,5 +1,9 @@
-import { useEffect, useState } from "react"
-import './Pagina.css'
+import { useEffect, useState } from "react";
+import './Pagina.css';
+import React from "react";
+import  Produtos  from "./Pagina/Produtos";
+import  adm  from "./Pagina/adm"
+
 interface ProdutosState {
     id: number,
     nome: string,
@@ -137,5 +141,19 @@ function Pagina() {
         </>
     )
 }
+
+export defalt function App(){
+    return (
+        <BrowserRouter>
+            <Routes>
+            <Route index element={home/} />
+            Routes path="/produtos" element={<Produtos />} />
+            <Route path="/adm" element={<adm />} />
+      </Routes>
+    </BrowserRouter>
+    );
+}
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
 
 export default Pagina
