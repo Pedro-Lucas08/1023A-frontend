@@ -3,7 +3,25 @@ import './Pagina.css';
 import React from "react";
 import  Produtos  from "./Pagina/Produtos";
 import  adm  from "./Pagina/adm"
+import Router from "./Routes";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 
+export default function Pagina() {
+    return (
+        <div>
+            <Router />
+        </div>
+    )
+}
+
+const produtos = () => {
+    retunr (
+        <div>
+            <h1>Produtos</h1>
+            <Link to="/">retornar pagina inicial</Link>
+        </div>
+    )
 interface ProdutosState {
     id: number,
     nome: string,
@@ -91,13 +109,13 @@ function Pagina() {
                 <nav>
                     <ul>
                         <li>
-                            <a href="">Home</a>
+                            <a href="">Produtos</a>
                         </li>
                         <li>
                             <a href="">Home</a>
                         </li>
                         <li>
-                            <a href="">Home</a>
+                            <a href="">adm</a>
                         </li>
                     </ul>
                 </nav>
@@ -137,23 +155,6 @@ function Pagina() {
 
                 </div>
             </main>
-            <footer></footer>
         </>
     )
 }
-
-export defalt function App(){
-    return (
-        <BrowserRouter>
-            <Routes>
-            <Route index element={home/} />
-            Routes path="/produtos" element={<Produtos />} />
-            <Route path="/adm" element={<adm />} />
-      </Routes>
-    </BrowserRouter>
-    );
-}
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
-
-export default Pagina
