@@ -1,11 +1,41 @@
 import { useEffect, useState } from "react";
 import './Pagina.css';
+<<<<<<< HEAD
 
 interface Produto {
     id: number;
     nome: string;
     preco: number;
     categoria: string;
+=======
+import React from "react";
+import  Produtos  from "./Pagina/Produtos";
+import  adm  from "./Pagina/adm"
+import Router from "./Routes";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
+
+export default function Pagina() {
+    return (
+        <div>
+            <Router />
+        </div>
+    )
+}
+
+const produtos = () => {
+    retunr (
+        <div>
+            <h1>Produtos</h1>
+            <Link to="/">retornar pagina inicial</Link>
+        </div>
+    )
+interface ProdutosState {
+    id: number,
+    nome: string,
+    preco: number,
+    categoria: string
+>>>>>>> 260a161993d8120ff6379aa48b5e53d3602375d8
 }
 
 function Pagina() {
@@ -97,9 +127,21 @@ function Pagina() {
                 <div>Logo</div>
                 <nav>
                     <ul>
+<<<<<<< HEAD
                         <li><a href="/">Home</a></li>
                         <li><a href="/">Produtos</a></li>
                         <li><a href="/">Relatórios</a></li>
+=======
+                        <li>
+                            <a href="">Produtos</a>
+                        </li>
+                        <li>
+                            <a href="">Home</a>
+                        </li>
+                        <li>
+                            <a href="">adm</a>
+                        </li>
+>>>>>>> 260a161993d8120ff6379aa48b5e53d3602375d8
                     </ul>
                 </nav>
             </header>
@@ -160,9 +202,11 @@ function Pagina() {
                     </form>
                 </div>
             </main>
-            <footer></footer>
         </>
     );
 }
+<<<<<<< HEAD
 
 export default Pagina;
+=======
+>>>>>>> 260a161993d8120ff6379aa48b5e53d3602375d8
