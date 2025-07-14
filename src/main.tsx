@@ -31,10 +31,10 @@ createRoot(document.getElementById('root')!).render(
 /*
 
 -- Criar o banco de dados
-CREATE DATABASE loja;
+CREATE DATABASE banco1023a;
 
 -- Usar o banco de dados
-USE loja;
+USE banco1023a;
 
 -- Criar tabela Categorias
 CREATE TABLE categorias (

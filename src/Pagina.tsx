@@ -1,212 +1,156 @@
 import { useEffect, useState } from "react";
 import './Pagina.css';
-<<<<<<< HEAD
-
-interface Produto {
-    id: number;
-    nome: string;
-    preco: number;
-    categoria: string;
-=======
-import React from "react";
-import  Produtos  from "./Pagina/Produtos";
-import  adm  from "./Pagina/adm"
-import Router from "./Routes";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-export default function Pagina() {
-    return (
-        <div>
-            <Router />
-        </div>
-    )
+// Definição da interface Produto
+interface Produto {
+  id: number;
+  nome: string;
+  preco: number;
+  categoria: string;
 }
 
-const produtos = () => {
-    retunr (
-        <div>
-            <h1>Produtos</h1>
-            <Link to="/">retornar pagina inicial</Link>
-        </div>
-    )
-interface ProdutosState {
-    id: number,
-    nome: string,
-    preco: number,
-    categoria: string
->>>>>>> 260a161993d8120ff6379aa48b5e53d3602375d8
-}
+export default function PaginaProdutos() {
+  const [formData, setFormData] = useState({
+    id: "",
+    nome: "",
+    preco: "",
+    categoria: "",
+  });
+  
+  const [mensagem, setMensagem] = useState("");
+  const [produtos, setProdutos] = useState<Produto[]>([]);
 
-function Pagina() {
-    // Estado para os campos do formulário e para os produtos
-    const [formData, setFormData] = useState({
-        id: "",
-        nome: "",
-        preco: "",
-        categoria: "",
-    });
-    const [mensagem, setMensagem] = useState("");
-    const [produtos, setProdutos] = useState<Produto[]>([]);
-
-    // Função para buscar os produtos do backend
-    useEffect(() => {
-        const buscaDados = async () => {
-            try {
-                const resultado = await fetch("http://localhost:8000/produtos");
-                if (resultado.ok) {
-                    const dados = await resultado.json();
-                    setProdutos(dados);
-                } else {
-                    const erro = await resultado.json();
-                    setMensagem(erro.mensagem);
-                }
-            } catch (erro) {
-                setMensagem("Erro ao carregar produtos.");
-            }
-        };
-        buscaDados();
-    }, []);
-
-    // Função para tratar o envio do formulário
-    async function handleCadastro(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-
-        // Validação simples
-        if (!formData.nome || !formData.preco || !formData.categoria) {
-            setMensagem("Todos os campos são obrigatórios.");
-            return;
+  // Carregar produtos ao iniciar a página
+  useEffect(() => {
+    const buscaDados = async () => {
+      try {
+        const resultado = await fetch("http://localhost:8000/produtos");
+        if (resultado.ok) {
+          const dados = await resultado.json();
+          setProdutos(dados);
+        } else {
+          const erro = await resultado.json();
+          setMensagem(erro.mensagem);
         }
+      } catch (erro) {
+        setMensagem("Erro ao carregar produtos.");
+      }
+    };
+    buscaDados();
+  }, []);
 
-        const novoProduto: Produto = {
-            id: parseInt(formData.id),
-            nome: formData.nome,
-            preco: parseFloat(formData.preco),
-            categoria: formData.categoria,
-        };
+  // Manipula o envio do formulário
+  async function handleCadastro(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
 
-        try {
-            const resposta = await fetch("http://localhost:8000/produtos", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(novoProduto),
-            });
-
-            if (resposta.ok) {
-                const dados = await resposta.json();
-                setProdutos([...produtos, dados]);
-                setFormData({
-                    id: "",
-                    nome: "",
-                    preco: "",
-                    categoria: "",
-                }); // Limpar os campos após cadastro
-            } else {
-                const erro = await resposta.json();
-                setMensagem(erro.mensagem);
-            }
-        } catch (erro) {
-            setMensagem("Erro ao cadastrar produto.");
-        }
+    if (!formData.nome || !formData.preco || !formData.categoria) {
+      setMensagem("Todos os campos são obrigatórios.");
+      return;
     }
 
-    // Função para tratar as mudanças nos inputs do formulário
-    function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-        const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+    const novoProduto: Produto = {
+      id: parseInt(formData.id),
+      nome: formData.nome,
+      preco: parseFloat(formData.preco),
+      categoria: formData.categoria,
+    };
+
+    try {
+      const resposta = await fetch("http://localhost:8000/produtos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(novoProduto),
+      });
+
+      if (resposta.ok) {
+        const dados = await resposta.json();
+        setProdutos([...produtos, dados]);
+        setFormData({ id: "", nome: "", preco: "", categoria: "" });
+        setMensagem("Produto cadastrado com sucesso!");
+      } else {
+        const erro = await resposta.json();
+        setMensagem(erro.mensagem);
+      }
+    } catch (erro) {
+      setMensagem("Erro ao cadastrar produto.");
     }
+  }
 
-    return (
-        <>
-            <header>
-                <div>Logo</div>
-                <nav>
-                    <ul>
-<<<<<<< HEAD
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/">Produtos</a></li>
-                        <li><a href="/">Relatórios</a></li>
-=======
-                        <li>
-                            <a href="">Produtos</a>
-                        </li>
-                        <li>
-                            <a href="">Home</a>
-                        </li>
-                        <li>
-                            <a href="">adm</a>
-                        </li>
->>>>>>> 260a161993d8120ff6379aa48b5e53d3602375d8
-                    </ul>
-                </nav>
-            </header>
-            <main>
-                {mensagem && (
-                    <div className="mensagem">
-                        <p>{mensagem}</p>
-                    </div>
-                )}
+  // Manipula mudança nos inputs
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  }
 
-                {/* Listagem de Produtos */}
-                <div className="container-listagem">
-                    {produtos.map(produto => (
-                        <div className="produto-container" key={produto.id}>
-                            <div className="produto-nome">{produto.nome}</div>
-                            <div className="produto-preco">{produto.preco}</div>
-                            <div className="produto-categoria">{produto.categoria}</div>
-                        </div>
-                    ))}
-                </div>
+  return (
+    <>
+      <header>
+        <div>Logo</div>
+        <nav>
+          <ul>
+            <li><Link to="/produtos">Produtos</Link></li>
+            <li><Link to="/categorias">Categorias</Link></li>
+            <li><Link to="/clientes">Clientes</Link></li>
+          </ul>
+        </nav>
+      </header>
 
-                {/* Formulário de Cadastro */}
-                <div className="container-cadastro">
-                    <form onSubmit={handleCadastro}>
-                        <input
-                            type="text"
-                            name="id"
-                            id="id"
-                            value={formData.id}
-                            onChange={handleChange}
-                            placeholder="ID"
-                        />
-                        <input
-                            type="text"
-                            name="nome"
-                            id="nome"
-                            value={formData.nome}
-                            onChange={handleChange}
-                            placeholder="Nome"
-                        />
-                        <input
-                            type="number"
-                            name="preco"
-                            id="preco"
-                            value={formData.preco}
-                            onChange={handleChange}
-                            placeholder="Preço"
-                        />
-                        <input
-                            type="text"
-                            name="categoria"
-                            id="categoria"
-                            value={formData.categoria}
-                            onChange={handleChange}
-                            placeholder="Categoria"
-                        />
-                        <input type="submit" value="Cadastrar" />
-                    </form>
-                </div>
-            </main>
-        </>
-    );
+      <main>
+        {mensagem && (
+          <div className="mensagem">
+            <p>{mensagem}</p>
+          </div>
+        )}
+
+        {/* Listagem de Produtos */}
+        <div className="container-listagem">
+          {produtos.map((produto) => (
+            <div className="produto-container" key={produto.id}>
+              <div className="produto-nome">{produto.nome}</div>
+              <div className="produto-preco">R$ {produto.preco.toFixed(2)}</div>
+              <div className="produto-categoria">{produto.categoria}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Formulário de Cadastro */}
+        <div className="container-cadastro">
+          <form onSubmit={handleCadastro}>
+            <input
+              type="text"
+              name="id"
+              value={formData.id}
+              onChange={handleChange}
+              placeholder="ID"
+            />
+            <input
+              type="text"
+              name="nome"
+              value={formData.nome}
+              onChange={handleChange}
+              placeholder="Nome"
+            />
+            <input
+              type="number"
+              name="preco"
+              value={formData.preco}
+              onChange={handleChange}
+              placeholder="Preço"
+            />
+            <input
+              type="text"
+              name="categoria"
+              value={formData.categoria}
+              onChange={handleChange}
+              placeholder="Categoria"
+            />
+            <input type="submit" value="Cadastrar" />
+          </form>
+        </div>
+      </main>
+    </>
+  );
 }
-<<<<<<< HEAD
-
-export default Pagina;
-=======
->>>>>>> 260a161993d8120ff6379aa48b5e53d3602375d8
