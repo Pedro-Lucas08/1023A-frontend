@@ -7,8 +7,11 @@ interface Produto {
   id: number;
   nome: string;
   preco: number;
-  categoria: string;
+  categoriaId: number | null; // correto
+  
 }
+
+
 
 export default function PaginaProdutos() {
   const [formData, setFormData] = useState({

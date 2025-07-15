@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import "./Home.css";
 
 const Home = () => (
   <div>
@@ -7,12 +7,6 @@ const Home = () => (
 
     <nav>
       <ul>
-        <li>
-          <Link to="/produtos">Produtos</Link>
-        </li>
-        <li>
-          <Link to="/adm">Administração</Link>
-        </li>
       </ul>
     </nav>
   </div>

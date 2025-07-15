@@ -9,6 +9,10 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>
 );
 
+app.register(cors, {
+  origin: '*', // ou defina: origin: "http://localhost:3000"
+});
+
 
 
 

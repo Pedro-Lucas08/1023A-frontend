@@ -27,11 +27,12 @@ h1 {
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
+  
 }
 
 .cliente-container {
-  width: 200px;
-  padding: 20px;
+  width: auto;
+  padding: 50px;
   background-color: #f4f4f4;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -95,3 +96,4 @@ input[type="submit"] {
 input[type="submit"]:hover {
   background-color: #0056b3;
 }
+

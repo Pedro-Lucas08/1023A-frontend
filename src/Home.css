@@ -1,0 +1,230 @@
+/* ===================================================================
+   home.css – folha de estilos principal da Home
+   -------------------------------------------------------------------
+   • Palette baseada em Material Design
+   • Layout responsivo (mobile‑first)
+   • Anotações em PT‑BR para fácil manutenção
+   =================================================================== */
+
+/* ====================   IMPORTAÇÕES E RESET   ==================== */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:"Inter",sans-serif;
+  color:#212121;           /* texto padrão */
+  background:#fafafa;       /* fundo suave */
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+
+img,svg,picture,video{
+  max-width:100%;
+  display:block;
+}
+
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+
+/* ====================   VARIÁVEIS CSS   ========================= */
+:root{
+  --primary-50:#e3f2fd;
+  --primary-100:#bbdefb;
+  --primary-200:#90caf9;
+  --primary-300:#64b5f6;
+  --primary-400:#42a5f5;
+  --primary-500:#2196f3;    /* cor principal */
+  --primary-600:#1e88e5;
+  --primary-700:#1976d2;
+  --primary-800:#1565c0;
+  --primary-900:#0d47a1;
+
+  --accent:#ffb300;
+  --radius-s:4px;
+  --radius-m:8px;
+  --radius-l:16px;
+
+  --shadow-s:0 1px 2px rgba(0,0,0,.07);
+  --shadow-m:0 4px 10px rgba(0,0,0,.1);
+}
+
+/* ====================   HEADER & NAV   =========================== */
+header{
+  background:var(--primary-500);
+  color:#fff;
+  padding:.75rem 1.5rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:var(--shadow-s);
+}
+
+header .logo{
+  font-weight:600;
+  font-size:1.25rem;
+  letter-spacing:.5px;
+}
+
+nav ul{
+  display:flex;
+  gap:1rem;
+}
+
+nav a{
+  display:block;
+  padding:.45rem .9rem;
+  border-radius:var(--radius-s);
+  transition:background .2s;
+}
+
+nav a:hover,nav a:focus{
+  background:rgba(255,255,255,.15);
+}
+
+/* ====================   HERO SECTION   ========================== */
+.hero{
+  background:linear-gradient(135deg,var(--primary-600),var(--primary-800));
+  color:#fff;
+  text-align:center;
+  padding:4rem 1rem 5rem;
+}
+
+.hero h1{
+  font-size:clamp(2rem,5vw,3rem);
+  font-weight:700;
+  margin-bottom:.75rem;
+}
+
+.hero p{
+  font-size:1.125rem;
+  max-width:50ch;
+  margin-inline:auto;
+  opacity:.9;
+}
+
+.btn{
+  display:inline-block;
+  margin-top:2rem;
+  background:#fff;
+  color:var(--primary-700);
+  padding:.65rem 1.5rem;
+  border-radius:var(--radius-s);
+  font-weight:600;
+  transition:transform .2s,box-shadow .2s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-m);
+}
+
+/* ====================   SEÇÃO DE CARDS   ======================== */
+.section{
+  padding:3rem 1rem;
+}
+
+.cards{
+  display:grid;
+  gap:1.5rem;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+}
+
+.card{
+  background:#fff;
+  border-radius:var(--radius-m);
+  box-shadow:var(--shadow-s);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  transition:transform .2s,box-shadow .2s;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:var(--shadow-m);
+}
+
+.card img{
+  aspect-ratio:16/9;
+  object-fit:cover;
+}
+
+.card .card-content{
+  padding:1rem 1.25rem 1.75rem;
+  flex-grow:1;
+  display:flex;
+  flex-direction:column;
+  gap:.5rem;
+}
+
+.card h3{
+  font-size:1.125rem;
+  font-weight:600;
+}
+
+/* ====================   FORMULÁRIO PADRÃO   ===================== */
+form{
+  display:grid;
+  gap:1rem;
+  max-width:500px;
+  margin-inline:auto;
+}
+
+input[type="text"],input[type="number"],input[type="email"],select{
+  padding:.55rem .9rem;
+  border:1px solid #ced4da;
+  border-radius:var(--radius-s);
+  font-size:1rem;
+}
+
+input[type="submit"],button{
+  background:var(--primary-500);
+  color:#fff;
+  border:none;
+  padding:.6rem 1.4rem;
+  border-radius:var(--radius-s);
+  font-weight:500;
+  cursor:pointer;
+  transition:background .2s;
+}
+
+input[type="submit"]:hover,button:hover{
+  background:var(--primary-600);
+}
+
+/* ====================   FOOTER   ================================ */
+footer{
+  background:#eceff1;
+  color:#555;
+  padding:1.5rem 1rem;
+  text-align:center;
+  font-size:.875rem;
+}
+
+/* ====================   RESPONSIVIDADE EXTRA   ================== */
+@media(min-width:768px){
+  .hero{
+    padding:5.5rem 1rem 6rem;
+  }
+}
+
+@media(min-width:1200px){
+  nav ul{
+    gap:2rem;
+  }
+  .cards{
+    gap:2rem;
+  }
+}

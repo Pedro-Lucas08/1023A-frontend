@@ -1,3 +1,11 @@
+
+header h1 {
+  margin-inline: auto;      /* empurra igualmente dos dois lados */
+}
+header h2 {
+  margin-inline: auto;      /* empurra igualmente dos dois lados */
+}
+
 /* Container geral */
 .container-categoria{
   width: 80%;
@@ -23,7 +31,7 @@ h1 {
 
 /* Estilo da listagem de categorias */
 .container-listagem {
-  display: flex;
+  margin-top: 30px;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
