@@ -1,18 +1,21 @@
 import React from "react";
-import { Route, BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Produtos from "./components/Home";
-import Home from "./components/About";
-import adm from "./components/NotFound";
+// Importações corretas com base nos seus arquivos:
+import Home from "../Home"; // Home.js
+import Produtos from "../PaginaProdutos"; // PaginaProdutos.tsx
+import Adm from "../Adm"; // Adm.js
 
 const Rotas = () => {
   return (
     <BrowserRouter>
-      <Route exact path="/" component={Home} />
-      <Route path="/produtos" component={Produtos} />
-      <Route path="/adm" component={adm} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/produtos" element={<Produtos />} />
+        <Route path="/adm" element={<Adm />} />
+      </Routes>
     </BrowserRouter>
   );
-}
+};
 
 export default Rotas;

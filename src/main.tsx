@@ -1,28 +1,13 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-//import './index.css'
-//import App from './App.tsx'
-//import Container from './Container.tsx'
-import { BrowserRouter } from 'react-router-dom';
-import Pagina from './Pagina'
+import React, { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App';
 
+// apenas UM roteador na aplicação → App já possui <Router>
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      {<Pagina/>}
-    </BrowserRouter>
-    {/* <Container nome='Header'/>
-    <Container nome='Body'/>
-    <Container nome='Footer'/> */}
-    
-  </StrictMode>,
-)
-
-
-
-
-
-
+    <App />
+  </StrictMode>
+);
 
 
 
@@ -31,10 +16,10 @@ createRoot(document.getElementById('root')!).render(
 /*
 
 -- Criar o banco de dados
-CREATE DATABASE loja;
+CREATE DATABASE banco1023a;
 
 -- Usar o banco de dados
-USE loja;
+USE banco1023a;
 
 -- Criar tabela Categorias
 CREATE TABLE categorias (
