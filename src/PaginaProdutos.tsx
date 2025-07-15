@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import './Pagina.css';
+import './PaginaProdutos.css';
 
 interface Produto {
     id: number;
@@ -10,7 +9,6 @@ interface Produto {
 }
 
 function PaginaProdutos() {
-    const navigate = useNavigate(); // useNavigate para navegação
     const [produtos, setProdutos] = useState<Produto[]>([]);
     const [id, setId] = useState("");
     const [nome, setNome] = useState("");
@@ -18,44 +16,62 @@ function PaginaProdutos() {
     const [categoria, setCategoria] = useState("");
     const [mensagem, setMensagem] = useState("");
 
-    // Fetch dos produtos
+    // Buscar produtos ao carregar a página
     useEffect(() => {
         const buscarProdutos = async () => {
             try {
                 const resultado = await fetch("http://localhost:8000/produtos");
-                if (resultado.status === 200) {
+                if (resultado.ok) {
                     const dados = await resultado.json();
                     setProdutos(dados);
                 } else {
                     const erro = await resultado.json();
-                    setMensagem(erro.mensagem);
+                    setMensagem(erro.mensagem || "Erro ao carregar produtos.");
                 }
             } catch (erro) {
                 setMensagem("Erro ao buscar produtos.");
             }
         };
+
         buscarProdutos();
     }, []);
 
-    // Função para cadastrar um novo produto
+    // Cadastrar novo produto
     const cadastrarProduto = async (event: React.FormEvent) => {
         event.preventDefault();
-        const novoProduto = { id: parseInt(id), nome, preco: parseFloat(preco), categoria };
+
+        if (!id || !nome || !preco || !categoria) {
+            setMensagem("Preencha todos os campos.");
+            return;
+        }
+
+        const novoProduto: Produto = {
+            id: Number(id),
+            nome,
+            preco: Number(preco),
+            categoria
+        };
+
         try {
             const resposta = await fetch("http://localhost:8000/produtos", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(novoProduto)
             });
-            if (resposta.status === 200) {
+
+            if (resposta.ok) {
                 const dados = await resposta.json();
                 setProdutos([...produtos, dados]);
+                setMensagem("Produto cadastrado com sucesso!");
 
-                // Navegar para a página de produtos após o cadastro
-                navigate("/produtos");
+                // Limpar formulário
+                setId("");
+                setNome("");
+                setPreco("");
+                setCategoria("");
             } else {
                 const erro = await resposta.json();
-                setMensagem(erro.mensagem);
+                setMensagem(erro.mensagem || "Erro ao cadastrar produto.");
             }
         } catch (erro) {
             setMensagem("Erro ao cadastrar produto.");
@@ -65,24 +81,25 @@ function PaginaProdutos() {
     return (
         <div>
             <h1>Produtos</h1>
+
             {mensagem && <div className="mensagem">{mensagem}</div>}
 
             <div className="container-listagem">
                 {produtos.map((produto) => (
                     <div key={produto.id} className="produto-container">
-                        <div>{produto.nome}</div>
-                        <div>{produto.preco}</div>
-                        <div>{produto.categoria}</div>
+                        <div><strong>Nome:</strong> {produto.nome}</div>
+                        <div><strong>Preço:</strong> R$ {produto.preco.toFixed(2)}</div>
+                        <div><strong>Categoria:</strong> {produto.categoria}</div>
                     </div>
                 ))}
             </div>
 
-            <div className="container-cadastro">
+            <div className="container-produtos">
                 <h2>Cadastrar Produto</h2>
                 <form onSubmit={cadastrarProduto}>
                     <input
                         type="text"
-                        placeholder="Id"
+                        placeholder="ID"
                         value={id}
                         onChange={(e) => setId(e.target.value)}
                     />
@@ -97,6 +114,7 @@ function PaginaProdutos() {
                         placeholder="Preço"
                         value={preco}
                         onChange={(e) => setPreco(e.target.value)}
+                        step="0.01"
                     />
                     <input
                         type="text"
