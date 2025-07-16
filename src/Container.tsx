@@ -36,4 +36,20 @@ function Container(props: ContainerProps) {
   );
 }
 
+import imgCalendar from './assets/6d80bf9e93aee8114455aa6b0564c6a0.webp'; // Importa a imagem local
+import './Container.css'; // Importa o CSS do componente
+
+function Container() {
+  const img = "https://a-static.mlcdn.com.br/800x560/computador-completo-intel-i5-4-geracao-8gb-hd-1tb-facil-computadores/olistplus/opmk9w8zulz00ecr/6d80bf9e93aee8114455aa6b0564c6a0.jpeg"; // URL externa
+
+  return (
+    <>
+      {/* Imagem externa */}
+      <img src={img} alt="imagem de um computador" className="calendar-image" />
+
+      {/* Imagem local */}
+      <img src={imgCalendar} alt="imagem local de um computador" className="calendar-image" />
+    </>
+  );
+}
 export default Container;

@@ -1,154 +1,122 @@
 import { useEffect, useState } from "react";
-import "./PaginaCategoria.css";
 
-interface Categoria {
-  id: number;
-  nome: string;
-}
+interface Categoria { id: number; nome: string }
+interface ApiErro { mensagem: string }
+const paraErro = (res: Response): Promise<never> =>
+  res.json().then((j: ApiErro) => { throw new Error(j.mensagem); });
 
-export default function PaginaCategoria() {
+export default function PaginaCategorias() {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const [nome, setNome] = useState("");
-  const [mensagem, setMensagem] = useState("");
+  const [msg, setMsg] = useState("");
 
-  // id que está em modo edição (0 = nenhum)
-  const [editId, setEditId] = useState<number | 0>(0);
-  const [editNome, setEditNome] = useState("");
+  // Form para nova categoria
+  const [formNome, setFormNome] = useState("");
 
-  /* ------------------------------------------------------------------ */
-  // FETCH INICIAL
+  // Estado edição categoria
+  const [editCatId, setEditCatId] = useState<number | null>(null);
+  const [editCatNome, setEditCatNome] = useState("");
+
   useEffect(() => {
-    (async () => {
-      try {
-        const r = await fetch("http://localhost:8000/categorias");
-        if (!r.ok) throw await r.json();
-        setCategorias(await r.json());
-      } catch (e: any) {
-        setMensagem(e?.mensagem ?? "Erro ao carregar categorias.");
-      }
-    })();
+    fetchCategorias();
   }, []);
 
-  /* ------------------------------------------------------------------ */
-  // CRIAR
-  async function cadastrar(e: React.FormEvent) {
+  async function fetchCategorias() {
+    try {
+      const r = await fetch("http://localhost:8000/categorias");
+      if (!r.ok) await paraErro(r);
+      setCategorias(await r.json());
+    } catch (e) {
+      setMsg((e as Error).message);
+    }
+  }
+
+  async function cadastrarCategoria(e: React.FormEvent) {
     e.preventDefault();
-    if (!nome.trim()) return setMensagem("Nome obrigatório.");
+    if (!formNome.trim()) return setMsg("Nome da categoria é obrigatório.");
     try {
       const r = await fetch("http://localhost:8000/categorias", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome }),
+        body: JSON.stringify({ nome: formNome }),
       });
-      if (!r.ok) throw await r.json();
-      const salvo = await r.json();
-      setCategorias((c) => [...c, salvo]);
-      setNome("");
-      setMensagem("Categoria criada!");
-    } catch (e: any) {
-      setMensagem(e?.mensagem ?? "Erro ao cadastrar.");
+      if (!r.ok) await paraErro(r);
+      setFormNome("");
+      await fetchCategorias();
+      setMsg("Categoria cadastrada!");
+    } catch (e) {
+      setMsg((e as Error).message);
     }
   }
 
-  /* ------------------------------------------------------------------ */
-  // ATIVAR EDIÇÃO
-  function iniciarEdicao(cat: Categoria) {
-    setEditId(cat.id);
-    setEditNome(cat.nome);
-    setMensagem("");
-  }
-
-  /* ------------------------------------------------------------------ */
-  // CANCELAR EDIÇÃO
-  function cancelarEdicao() {
-    setEditId(0);
-    setEditNome("");
-  }
-
-  /* ------------------------------------------------------------------ */
-  // SALVAR EDIÇÃO (PUT)
-  async function salvarEdicao() {
-    if (!editNome.trim()) return setMensagem("Nome obrigatório.");
-    try {
-      const r = await fetch(`http://localhost:8000/categorias/${editId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome: editNome }),
-      });
-      if (!r.ok) throw await r.json();
-      const atualizado = await r.json();
-      setCategorias((c) =>
-        c.map((cat) => (cat.id === editId ? atualizado : cat))
-      );
-      cancelarEdicao();
-    } catch (e: any) {
-      setMensagem(e?.mensagem ?? "Erro ao atualizar.");
-    }
-  }
-
-  /* ------------------------------------------------------------------ */
-  // DELETAR
-  async function deletar(id: number) {
-    if (!confirm("Excluir esta categoria?")) return;
+  async function salvarEdicaoCategoria(id: number) {
+    if (!editCatNome.trim()) return setMsg("Nome da categoria é obrigatório.");
     try {
       const r = await fetch(`http://localhost:8000/categorias/${id}`, {
-        method: "DELETE",
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome: editCatNome }),
       });
-      if (!r.ok) throw await r.json();
-      setCategorias((c) => c.filter((cat) => cat.id !== id));
-    } catch (e: any) {
-      setMensagem(e?.mensagem ?? "Erro ao excluir.");
+      if (!r.ok) await paraErro(r);
+      setEditCatId(null);
+      await fetchCategorias();
+      setMsg("Categoria editada!");
+    } catch (e) {
+      setMsg((e as Error).message);
     }
   }
 
-  /* ------------------------------------------------------------------ */
+  async function deletarCategoria(id: number) {
+    if (!confirm("Excluir categoria?")) return;
+    try {
+      const r = await fetch(`http://localhost:8000/categorias/${id}`, { method: "DELETE" });
+      if (!r.ok) await paraErro(r);
+      setCategorias(c => c.filter(x => x.id !== id));
+    } catch (e) {
+      setMsg((e as Error).message);
+    }
+  }
+
   return (
     <div>
-      <header>
-        <h1>Categorias</h1>
-      </header>
+      <h1>Categorias</h1>
+      {msg && <div className="mensagem">{msg}</div>}
 
-      {mensagem && <div className="mensagem">{mensagem}</div>}
+      <div className="container-listagem">
+        {categorias.map(c => (
+          <div key={c.id} className="produto-container">
+            {editCatId === c.id ? (
+              <>
+                <input
+                  value={editCatNome}
+                  onChange={e => setEditCatNome(e.target.value)}
+                  placeholder="Nome da Categoria"
+                />
+                <button onClick={() => salvarEdicaoCategoria(c.id)}>Salvar</button>
+                <button onClick={() => setEditCatId(null)}>Cancelar</button>
+              </>
+            ) : (
+              <>
+                <div><strong>{c.nome}</strong></div>
+                <button onClick={() => {
+                  setEditCatId(c.id);
+                  setEditCatNome(c.nome);
+                }}>Editar</button>
+                <button onClick={() => deletarCategoria(c.id)}>Excluir</button>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
 
-      {/* LISTAGEM */}
-      <section className="container-listagem">
-        {categorias.map((cat) =>
-          editId === cat.id ? (
-            // MODO EDIÇÃO
-            <div key={cat.id} className="categoria-container editando">
-              <input
-                value={editNome}
-                onChange={(e) => setEditNome(e.target.value)}
-              />
-              <button onClick={salvarEdicao}>Salvar</button>
-              <button onClick={cancelarEdicao}>Cancelar</button>
-            </div>
-          ) : (
-            // VISUALIZAÇÃO NORMAL
-            <div key={cat.id} className="categoria-container">
-              <span>{cat.nome}</span>
-              <div className="acoes">
-                <button onClick={() => iniciarEdicao(cat)}>Editar</button>
-                <button onClick={() => deletar(cat.id)}>Excluir</button>
-              </div>
-            </div>
-          )
-        )}
-      </section>
-
-      {/* FORM CADASTRO */}
-      <section className="container-categoria">
-        <h2>Cadastrar Categoria</h2>
-        <form onSubmit={cadastrar}>
-          <input
-            type="text"
-            placeholder="Nome"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-          />
-          <input type="submit" value="Cadastrar" />
-        </form>
-      </section>
+      <form onSubmit={cadastrarCategoria} className="container-cadastro">
+        <h3>Cadastro de Categoria</h3>
+        <input
+          placeholder="Nome"
+          value={formNome}
+          onChange={e => setFormNome(e.target.value)}
+        />
+        <button type="submit">Cadastrar Categoria</button>
+      </form>
     </div>
   );
 }
